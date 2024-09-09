@@ -2,7 +2,6 @@
 
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-CC%20BY--NC-orange)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Last Commit](https://img.shields.io/github/last-commit/xxqqwua/AutoZaka)
 
 ## Overview
