@@ -7,6 +7,7 @@ from config import read_config
 
 
 TOKEN = read_config()
+COOKIE = read_config()[1]
 logging.basicConfig(filename='logs.txt', filemode='a', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -16,7 +17,8 @@ headers = {
     "X-Requested-With": "XMLHttpRequest",
     "Origin": "https://zaka-zaka.com",
     "Connection": "keep-alive",
-    "Referer": "https://zaka-zaka.com/game/gifts/"
+    "Referer": "https://zaka-zaka.com/game/gifts/",
+    "Cookie": COOKIE
 }
 
 def random_steam_key():
