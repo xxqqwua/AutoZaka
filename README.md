@@ -20,7 +20,7 @@ To set up AutoZaka, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/AutoZaka.git
+   git clone https://github.com/xxqqwua/AutoZaka.git
    cd AutoZaka
 2. Install the required dependencies:
    ```bash
