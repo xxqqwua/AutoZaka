@@ -24,7 +24,7 @@ To set up AutoZaka, follow these steps:
    cd AutoZaka
 2. Install the required dependencies:
    ```bash
-   pip install pillow requests pystray configparser
+   pip install -r requirements.txt
 3. Run the program:
    ```bash
    python autozaka.py
