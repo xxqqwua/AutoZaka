@@ -51,12 +51,12 @@ def scheduler():
     schedule.every().day.at("10:05").do(coupons)
     schedule.every().day.at("20:05").do(coupons)
 
-    schedule.every().day.at("13:05").do(random_steam)
-    schedule.every().day.at("17:05").do(random_steam)
-    schedule.every().day.at("21:05").do(random_steam)
-    schedule.every().day.at("00:05").do(random_steam)
+    schedule.every().day.at("13:05").do(random_steam_key)
+    schedule.every().day.at("17:05").do(random_steam_key)
+    schedule.every().day.at("21:05").do(random_steam_key)
+    schedule.every().day.at("00:05").do(random_steam_key)
 
-    schedule.every().day.at("20:07").do(good_game)
+    schedule.every().day.at("20:07").do(random_game)
 
     # Runs all scheduled functions in a loop.
     while True:
