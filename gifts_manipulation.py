@@ -3,11 +3,11 @@ import schedule
 import time
 import logging
 
-from config import read_config
+from config import read_token_n_cookie
 
-
-TOKEN = read_config()
-COOKIE = read_config()[1]
+config = read_token_n_cookie()
+TOKEN = config[0]
+COOKIE = config[1]
 logging.basicConfig(filename='logs.txt', filemode='a', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 

@@ -11,10 +11,19 @@ def on_quit(icon):  # Stop the icon and exit the program.
 def on_logs():  # Open the log file.
     os.startfile("logs.txt")
 
-def create_image():  # Create an image for the icon.
-    image = Image.new('RGB', (64, 64), (255, 255, 255))
+def create_image():
+    # Создание изображения с белым фоном 32x32 (размер как в SVG)
+    image = Image.new('RGB', (32, 32), 'white')
     draw = ImageDraw.Draw(image)
-    draw.rectangle((16, 16, 48, 48), fill=(0, 0, 0))
+
+    # Нарисовать прямоугольник как основу билета
+    draw.rectangle([(0, 0), (31, 31)], outline='#231f20', width=2)
+
+    # Нарисовать элементы внутри билета (эти данные упрощены)
+    draw.rectangle([(4, 4), (28, 28)], outline='#231f20', width=1)  # Внутренний квадрат
+    draw.line([(4, 8), (28, 8)], fill='#231f20', width=1)  # Верхняя линия
+    draw.line([(4, 24), (28, 24)], fill='#231f20', width=1)  # Нижняя линия
+
     return image
 
 

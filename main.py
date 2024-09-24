@@ -11,8 +11,11 @@ def main():
     with open("logs.txt", "w") as f:
         f.write("/// Code 400 means that participation in the drawing has already been accepted, there is no need to worry \n\n")
 
-    # Starts scheduler in separate thread.
-    main_thread = threading.Thread(target=scheduler)
+    scheduler()
+
+
+def startup():
+    main_thread = threading.Thread(target=main)
     main_thread.daemon = True     # Sets thread as daemon, so it will stop when main program stops.
     main_thread.start()
 
@@ -20,4 +23,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    startup()

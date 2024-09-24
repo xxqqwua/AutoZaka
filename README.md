@@ -32,8 +32,8 @@ To set up AutoZaka, follow these steps:
 ## Usage
 AutoZaka works as follows:
 1. **First Run**:
-   * Upon first run, AutoZaka checks for the presence of `config.txt`. If it is missing, the program will prompt you to enter your user token for zaka-zaka.com.
-   * The token is saved in `config.txt` for future use.
+   * The first time AutoZaka starts up, it checks for the presence of the `config.txt` file. If it is missing, the program prompts you to enter your login and password for zaka-zaka.com.
+   * Using your login and password, the program will log in once to your profile and save the token cookie in `config.txt` for future use.
 2. **Subsequent Runs**:
    * For future runs, the program automatically reads the saved token and sends the necessary POST requests to participate in drawings without requiring further input.
 3. **Exiting the Program:**
@@ -52,6 +52,9 @@ Please ensure your code adheres to the existing style and includes tests for any
 
 ## Future Plans
 * **Multitasking**: Implement multitasking functionality to allow the program to process multiple tokens simultaneously, increasing efficiency for users with multiple accounts.
+
+## Credits
+The program uses a script to solve captcha from [obaskly](https://github.com/obaskly/RecaptchaBypass).
 
 ## License
 This project is licensed under the Creative Commons BY-NC (Attribution-NonCommercial) License. You are free to share and adapt the material, but it cannot be used for commercial purposes. For more details, visit [Creative Commons BY-NC](https://creativecommons.org/licenses/by-nc/4.0/).
