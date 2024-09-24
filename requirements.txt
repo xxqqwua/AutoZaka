@@ -1,0 +1,12 @@
+selenium
+pydub
+SpeechRecognition
+aiohttp
+pystray
+Pillow
+tk
+requests
+schedule
+logging
+selenium-stealth
+configparser
