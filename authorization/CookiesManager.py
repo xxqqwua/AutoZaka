@@ -11,18 +11,19 @@ class CookiesManager:
         token = self.driver.execute_script(script)
 
         cookies = self.driver.get_cookies()
-        PHPSESSID = None
+        phpsessid = None
 
         for cookie in cookies:
             if cookie["name"] == "PHPSESSID":  # For the cookie program to work, we only need PHPSESSID
-                PHPSESSID = cookie["value"]
+                phpsessid = cookie["value"]
                 break
 
-        return token, PHPSESSID
+        return token, phpsessid
 
-    def save_cookies(self, token, PHPSESSID):  # Save cookies function
+    @staticmethod
+    def save_cookies(token, phpsessid):  # Save cookies function
         import json
 
-        data = {'TOKEN': str(token), 'PHPSESSID': str(PHPSESSID)}
+        data = {'YII_CSRF_TOKEN': str(token), 'PHPSESSID': str(phpsessid)}
         with open('cookies.json', 'w') as f:
             json.dump(data, f)
