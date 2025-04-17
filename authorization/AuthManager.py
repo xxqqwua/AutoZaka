@@ -29,3 +29,10 @@ class AuthManager:
         input_password.send_keys(Keys.ENTER)
 
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'profile-user-name')))
+
+        from authorization.CookiesManager import CookiesManager
+        CksMngr = CookiesManager(self.driver)
+        token, PHPSESSID = CksMngr.collect_cookies()
+        CksMngr.save_cookies(token, PHPSESSID)
+
+        self.driver.quit()
