@@ -1,7 +1,9 @@
 import schedule
 import requests
+import logging
 import time
 import json
+
 
 class Participation:
     def __init__(self):
@@ -54,6 +56,9 @@ class Participation:
             if 'сайта' in r.text or ':E' in r.text:
                 return 'CSRF ERROR'
 
+            logging.info(f"The giveaway for {'steam random key' if ga_type == '1' else 'random game' if ga_type == '4' else 'coupons'
+                            if ga_type == '5' else 'vip'} has been entered")
+
             return r.text
 
         if ga_type is not None:
@@ -75,6 +80,7 @@ class Participation:
         type 5 - coupons
         type 2 - vip
         """
+        logging.info('Scheduling started')
 
         schedule.every().day.at('23:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('13:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))

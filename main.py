@@ -33,4 +33,9 @@ def login_and_participate(p, email, password):
 
 
 if __name__ == '__main__':
+    import logging
+    from logging_config import LOGGING_CONFIG
+
+    logging.config.dictConfig(LOGGING_CONFIG)
+
     main()

@@ -3,12 +3,16 @@ import random
 import asyncio
 import aiohttp
 import time
+import logging
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from pydub import AudioSegment
 import speech_recognition as sr
+
+logger = logging.getLogger(__name__)
+
 
 class RecaptchaSolver:
     def __init__(self, driver):
@@ -19,7 +23,7 @@ class RecaptchaSolver:
             async with session.get(url) as response:
                 with open(path, 'wb') as f:
                     f.write(await response.read())
-        print("Downloaded audio asynchronously.")
+        logger.debug("Downloaded audio asynchronously.")
 
     def solveCaptcha(self):
         try:
@@ -27,7 +31,7 @@ class RecaptchaSolver:
             iframe_inner = WebDriverWait(self.driver, 10).until(
                 EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[contains(@title, 'reCAPTCHA')]"))
             )
-            
+
             # Click on the CAPTCHA box
             WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.ID, 'recaptcha-anchor'))
@@ -51,44 +55,44 @@ class RecaptchaSolver:
     def solveAudioCaptcha(self):
         try:
             self.driver.switch_to.default_content()
-            
+
             # Switch to the audio CAPTCHA iframe
             iframe_audio = WebDriverWait(self.driver, 10).until(
                 EC.frame_to_be_available_and_switch_to_it((By.XPATH, '/html/body/div[9]/div[4]/iframe'))
             )
-            print("Switched to audio CAPTCHA iframe.")
+            logger.debug("Switched to audio CAPTCHA iframe.")
 
             # Click on the audio button
             audio_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.ID, 'recaptcha-audio-button'))
             )
             audio_button.click()
-            print("Clicked on audio button.")
+            logger.debug("Clicked on audio button.")
 
             # Get the audio source URL
             audio_source = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, 'audio-source'))
             ).get_attribute('src')
-            print(f"Audio source URL: {audio_source}")
-            
+            logger.debug(f"Audio source URL: {audio_source}")
+
             # Download the audio to the temp folder asynchronously
             temp_dir = os.getenv("TEMP") if os.name == "nt" else "/tmp/"
             path_to_mp3 = os.path.normpath(os.path.join(temp_dir, f"{random.randrange(1, 1000)}.mp3"))
             path_to_wav = os.path.normpath(os.path.join(temp_dir, f"{random.randrange(1, 1000)}.wav"))
-            
+
             asyncio.run(self.download_audio(audio_source, path_to_mp3))
 
             # Convert mp3 to wav
             sound = AudioSegment.from_mp3(path_to_mp3)
             sound.export(path_to_wav, format="wav")
-            print("Converted MP3 to WAV.")
+            logger.debug("Converted MP3 to WAV.")
 
             # Recognize the audio
             recognizer = sr.Recognizer()
             with sr.AudioFile(path_to_wav) as source:
                 audio = recognizer.record(source)
             captcha_text = recognizer.recognize_google(audio).lower()
-            print(f"Recognized CAPTCHA text: {captcha_text}")
+            logger.info(f"Recognized CAPTCHA text: {captcha_text}")
 
             # Enter the CAPTCHA text
             audio_response = WebDriverWait(self.driver, 20).until(
@@ -96,14 +100,14 @@ class RecaptchaSolver:
             )
             audio_response.send_keys(captcha_text)
             audio_response.send_keys(Keys.ENTER)
-            print("Entered and submitted CAPTCHA text.")
+            logger.info("Entered and submitted CAPTCHA text.")
 
             # Wait for CAPTCHA to be processed
             time.sleep(0.8)  # Increase this if necessary
 
             # Verify CAPTCHA is solved
             if self.isSolved():
-                print("Audio CAPTCHA solved.")
+                logger.info("Audio CAPTCHA solved.")
             else:
                 print("Failed to solve audio CAPTCHA.")
                 raise Exception("Failed to solve CAPTCHA")

@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class CookiesManager:
     def __init__(self, driver):
         self.driver = driver
@@ -9,6 +14,7 @@ class CookiesManager:
         """
 
         token = self.driver.execute_script(script)
+        logger.info("The token has been collected")
 
         cookies = self.driver.get_cookies()
         phpsessid = None
@@ -17,6 +23,7 @@ class CookiesManager:
             if cookie["name"] == "PHPSESSID":  # For the cookie program to work, we only need PHPSESSID
                 phpsessid = cookie["value"]
                 break
+        logger.info("The phpsessid has been collected")
 
         return token, phpsessid
 
