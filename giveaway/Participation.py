@@ -35,19 +35,49 @@ class Participation:
         self.PHPSESSID = data['PHPSESSID']
         self.cookies['PHPSESSID'] = data['PHPSESSID']
 
-    def enter_the_giveaway(self, interval=1.5):
+    def enter_the_giveaway(self, interval=1.5, ga_type=None):
         import time
         import requests
 
-        for giveaway_type in ['1', '4', '5']:
-            time.sleep(interval)
+        def do_enter(ga_type):
             data = {
-                'type': giveaway_type,
+                'type': ga_type,
                 'YII_CSRF_TOKEN': self.YII_CSRF_TOKEN
             }
 
             r = requests.post('https://zaka-zaka.com/game/gifts/ajax/', cookies=self.cookies, headers=self.headers,
-                              data=data)  # Make a POST request to enter the giveaway
+                              data=data)
 
             if 'сайта' in r.text or ':E' in r.text:
                 return 'CSRF ERROR'
+
+            return r.text
+
+        if ga_type is not None:
+            return do_enter(ga_type)
+        else:
+            for giveaway_type in ['1', '4', '5']:
+                time.sleep(interval)
+                do_enter(giveaway_type)
+
+    def scheduling(self):
+        import schedule
+        '''
+        steam: 23:00, 13:00, 17:00
+        game: 20:00
+        coupons: 20:00
+        vip: 21:00
+        
+        type 1 - steam
+        type 4 - random game
+        type 5 - coupons
+        type 2 - vip
+        '''
+
+        print('123')
+        schedule.every().day.at('23:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
+        schedule.every().day.at('13:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
+        schedule.every().day.at('17:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
+
+        schedule.every().day.at("20:05", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=4))
+        schedule.every().day.at("20:06", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=5))

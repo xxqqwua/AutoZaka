@@ -10,6 +10,8 @@ class AuthManager:
         self.options = webdriver.ChromeOptions()
         self.options.add_argument("--incognito")
         self.options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
+        self.options.add_argument("--headless=new")
+        self.options.add_argument("--mute-audio")
         self.driver = webdriver.Chrome(options=self.options)
 
     def login_via_pass(self, email, password):
