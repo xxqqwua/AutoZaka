@@ -54,14 +54,16 @@ class RecaptchaSolver:
             
             # Switch to the audio CAPTCHA iframe
             iframe_audio = WebDriverWait(self.driver, 10).until(
-                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[@title="recaptcha challenge expires in two minutes"]'))
+                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '/html/body/div[9]/div[4]/iframe'))
             )
+            print("Switched to audio CAPTCHA iframe.")
 
             # Click on the audio button
             audio_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.ID, 'recaptcha-audio-button'))
             )
             audio_button.click()
+            print("Clicked on audio button.")
 
             # Get the audio source URL
             audio_source = WebDriverWait(self.driver, 10).until(

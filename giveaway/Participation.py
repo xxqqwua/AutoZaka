@@ -1,3 +1,8 @@
+import schedule
+import requests
+import time
+import json
+
 class Participation:
     def __init__(self):
         self.YII_CSRF_TOKEN = None
@@ -26,19 +31,17 @@ class Participation:
         }
 
     def load_cookies(self):
-        import json
+        try:
+            with open('cookies.json', 'r') as f:
+                data = json.load(f)
 
-        with open('../cookies.json', 'r') as f:
-            data = json.load(f)
-
-        self.YII_CSRF_TOKEN = data['YII_CSRF_TOKEN']
-        self.PHPSESSID = data['PHPSESSID']
-        self.cookies['PHPSESSID'] = data['PHPSESSID']
+            self.YII_CSRF_TOKEN = data['YII_CSRF_TOKEN']
+            self.PHPSESSID = data['PHPSESSID']
+            self.cookies['PHPSESSID'] = data['PHPSESSID']
+        except FileNotFoundError:
+            return 'FileNotFoundError'
 
     def enter_the_giveaway(self, interval=1.5, ga_type=None):
-        import time
-        import requests
-
         def do_enter(ga_type):
             data = {
                 'type': ga_type,
@@ -61,23 +64,25 @@ class Participation:
                 do_enter(giveaway_type)
 
     def scheduling(self):
-        import schedule
-        '''
+        """
         steam: 23:00, 13:00, 17:00
         game: 20:00
         coupons: 20:00
         vip: 21:00
-        
+
         type 1 - steam
         type 4 - random game
         type 5 - coupons
         type 2 - vip
-        '''
+        """
 
-        print('123')
         schedule.every().day.at('23:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('13:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('17:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
 
         schedule.every().day.at("20:05", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=4))
         schedule.every().day.at("20:06", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=5))
+
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
