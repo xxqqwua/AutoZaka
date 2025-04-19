@@ -11,8 +11,8 @@ password = os.getenv('PASSWORD')
 
 
 def main():
-    v = Validator()
-    v.validate_env_file()
+    # v = Validator()
+    # v.validate_env_file()
 
     p = Participation()
     if p.load_cookies() != 'FileNotFoundError':

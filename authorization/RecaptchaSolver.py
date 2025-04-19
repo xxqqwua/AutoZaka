@@ -11,8 +11,6 @@ from selenium.webdriver.common.keys import Keys
 from pydub import AudioSegment
 import speech_recognition as sr
 
-logger = logging.getLogger(__name__)
-
 
 class RecaptchaSolver:
     def __init__(self, driver):
@@ -23,7 +21,7 @@ class RecaptchaSolver:
             async with session.get(url) as response:
                 with open(path, 'wb') as f:
                     f.write(await response.read())
-        logger.debug("Downloaded audio asynchronously.")
+        logging.debug("Downloaded audio asynchronously.")
 
     def solveCaptcha(self):
         try:
@@ -40,7 +38,7 @@ class RecaptchaSolver:
             # Check if the CAPTCHA is solved
             time.sleep(1)  # Allow some time for the state to update
             if self.isSolved():
-                print("CAPTCHA solved by clicking.")
+                logging.debug("CAPTCHA solved by clicking.")
                 self.driver.switch_to.default_content()  # Switch back to main content
                 return
 
@@ -60,20 +58,20 @@ class RecaptchaSolver:
             iframe_audio = WebDriverWait(self.driver, 10).until(
                 EC.frame_to_be_available_and_switch_to_it((By.XPATH, '/html/body/div[9]/div[4]/iframe'))
             )
-            logger.debug("Switched to audio CAPTCHA iframe.")
+            logging.debug("Switched to audio CAPTCHA iframe.")
 
             # Click on the audio button
             audio_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.ID, 'recaptcha-audio-button'))
             )
             audio_button.click()
-            logger.debug("Clicked on audio button.")
+            logging.debug("Clicked on audio button.")
 
             # Get the audio source URL
             audio_source = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, 'audio-source'))
             ).get_attribute('src')
-            logger.debug(f"Audio source URL: {audio_source}")
+            logging.debug(f"Audio source URL: {audio_source}")
 
             # Download the audio to the temp folder asynchronously
             temp_dir = os.getenv("TEMP") if os.name == "nt" else "/tmp/"
@@ -85,14 +83,14 @@ class RecaptchaSolver:
             # Convert mp3 to wav
             sound = AudioSegment.from_mp3(path_to_mp3)
             sound.export(path_to_wav, format="wav")
-            logger.debug("Converted MP3 to WAV.")
+            logging.debug("Converted MP3 to WAV.")
 
             # Recognize the audio
             recognizer = sr.Recognizer()
             with sr.AudioFile(path_to_wav) as source:
                 audio = recognizer.record(source)
             captcha_text = recognizer.recognize_google(audio).lower()
-            logger.info(f"Recognized CAPTCHA text: {captcha_text}")
+            logging.info(f"Recognized CAPTCHA text: {captcha_text}")
 
             # Enter the CAPTCHA text
             audio_response = WebDriverWait(self.driver, 20).until(
@@ -100,14 +98,14 @@ class RecaptchaSolver:
             )
             audio_response.send_keys(captcha_text)
             audio_response.send_keys(Keys.ENTER)
-            logger.info("Entered and submitted CAPTCHA text.")
+            logging.info("Entered and submitted CAPTCHA text.")
 
             # Wait for CAPTCHA to be processed
             time.sleep(0.8)  # Increase this if necessary
 
             # Verify CAPTCHA is solved
             if self.isSolved():
-                logger.info("Audio CAPTCHA solved.")
+                logging.info("Audio CAPTCHA solved.")
             else:
                 print("Failed to solve audio CAPTCHA.")
                 raise Exception("Failed to solve CAPTCHA")
