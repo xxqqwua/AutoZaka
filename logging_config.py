@@ -20,7 +20,7 @@ LOGGING_CONFIG = {
         }
     },
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['console', 'file']
     }
 }

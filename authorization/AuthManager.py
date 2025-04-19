@@ -20,12 +20,12 @@ class AuthManager:
         self.driver = webdriver.Firefox(options=self.options)
 
     def login_via_pass(self, email, password):
-        recaptchaSolver = RecaptchaSolver(self.driver)
+        recaptcha_solver = RecaptchaSolver(self.driver)
 
         logger.info("Going to the authorization site")
         self.driver.get('https://zaka-zaka.com/profile/auth')
         wait = WebDriverWait(self.driver, 180)
-        recaptchaSolver.solveCaptcha()
+        recaptcha_solver.solveCaptcha()
 
         input_login = wait.until(EC.presence_of_element_located((By.NAME, 'LoginForm[login]')))
         input_login.send_keys(email)
@@ -39,9 +39,9 @@ class AuthManager:
 
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'profile-user-name')))
 
-        CksMngr = CookiesManager(self.driver)
-        token, PHPSESSID = CksMngr.collect_cookies()
-        CksMngr.save_cookies(token, PHPSESSID)
+        cks_mngr = CookiesManager(self.driver)
+        token, phpsessid = cks_mngr.collect_cookies()
+        cks_mngr.save_cookies(token, phpsessid)
         logger.info("The authorization has been completed & Cookies have been saved")
 
         self.driver.quit()

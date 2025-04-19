@@ -1,12 +1,12 @@
+import tkinter as tk
+from tkinter import messagebox
+
 from dotenv import load_dotenv
 import logging
 import os
 
 load_dotenv()
 logger = logging.getLogger(__name__)
-
-import tkinter as tk
-from tkinter import messagebox
 
 
 class Validator:
@@ -25,7 +25,7 @@ class Validator:
             os.startfile(os.path.join(os.path.dirname(__file__), '.env'))
             exit()
 
-        if not '@' in os.getenv('EMAIL'):
+        if '@' not in os.getenv('EMAIL'):
             messagebox.showerror("AutoZaka: Error", "Please enter a valid email address and restart the program.")
             logger.error("Please enter a valid email address and restart the program.")
             os.startfile(os.path.join(os.path.dirname(__file__), '.env'))
