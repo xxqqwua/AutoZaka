@@ -27,7 +27,6 @@ def main():
 def login_and_participate(p, email, password):
     auth = AuthManager()
     auth.login_via_pass(email, password)
-    p.load_cookies()
     p.enter_the_giveaway()
     p.scheduling()
 

@@ -14,7 +14,7 @@ from authorization.RecaptchaSolver import RecaptchaSolver
 class AuthManager:
     def __init__(self):
         self.options = webdriver.FirefoxOptions()
-        # self.options.add_argument("--headless")
+        self.options.add_argument("--headless")
         self.options.add_argument("--mute-audio")
         self.driver = webdriver.Firefox(options=self.options)
 

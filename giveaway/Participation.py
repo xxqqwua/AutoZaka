@@ -56,13 +56,19 @@ class Participation:
             if 'сайта' in r.text or ':E' in r.text:
                 return 'CSRF ERROR'
 
+            type_name = {
+                '1': 'steam random key',
+                '4': 'random game',
+                '5': 'coupons'
+            }.get(ga_type, 'vip')
+
             if '{"code":304}' in r.text:
-                logging.info(f"There's already been a drawing for the {'steam random key' if ga_type == '1' else 'random game' if ga_type == '4' else 'coupons' if ga_type == '5' else 'vip'}")
+                logging.info(f"There's already been a drawing for the {type_name}")
             else:
-                logging.info(
-                    f"The giveaway for {'steam random key' if ga_type == '1' else 'random game' if ga_type == '4' else 'coupons' if ga_type == '5' else 'vip'} has been entered")
+                logging.info(f"The giveaway for {type_name} has been entered")
             logging.debug(r.text)
 
+        self.load_cookies()
         if ga_type is not None:
             do_enter(ga_type)
         else:
@@ -72,7 +78,7 @@ class Participation:
 
     def scheduling(self):
         """
-        steam: 23:00, 13:00, 17:00
+        steam: 00:00, 13:00, 17:00
         game: 20:00
         coupons: 20:00
         vip: 21:00
@@ -84,7 +90,7 @@ class Participation:
         """
         logging.info('Scheduling started')
 
-        schedule.every().day.at('23:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
+        schedule.every().day.at('00:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('13:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('17:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
         schedule.every().day.at('21:05', tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=1))
