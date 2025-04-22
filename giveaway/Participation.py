@@ -70,17 +70,22 @@ class Participation:
 
         self.load_cookies()
         if ga_type is not None:
-            do_enter(ga_type)
+            ga_type = str(ga_type)
+            res = do_enter(ga_type)
+            if res == 'CSRF ERROR':
+                return 'CSRF ERROR'
         else:
             for giveaway_type in ['1', '4', '5']:
                 time.sleep(interval)
-                do_enter(giveaway_type)
+                res = do_enter(giveaway_type)
+                if res == 'CSRF ERROR':
+                    return 'CSRF ERROR'
 
     def scheduling(self):
         """
         steam: 00:00, 13:00, 17:00
         game: 20:00
-        coupons: 20:00
+        coupons: 20:00, ?
         vip: 21:00
 
         type 1 - steam
