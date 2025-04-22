@@ -1,6 +1,7 @@
 from validating.ValidateFiles import Validator
 from giveaway.Participation import Participation
 from authorization.AuthManager import AuthManager
+import tray.Tray
 
 import os
 from dotenv import load_dotenv
