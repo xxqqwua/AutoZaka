@@ -3,10 +3,16 @@ import io
 import requests
 import logging
 import threading
+import asyncio
+
+import tkinter as tk
+from tkinter import messagebox
 
 import pystray
 from pystray import Icon, Menu, MenuItem as Item
 from PIL import Image
+
+from misc.HappyHour import HappyHour
 
 
 def open_logs():
@@ -18,6 +24,30 @@ def open_env():
     logging.debug('.ENV logs')
     os.startfile('.env')
 
+
+async def happy_hour():
+    HP = HappyHour()
+    await HP.extract_happy_hour_games()
+
+    formatted_games = "\n".join(
+        f"Name: {game['name']}\n"
+        f"Tags: {game['tags']}\n"
+        f"Discount: {game['discount']}\n"
+        f"Current Price: {game['current_price']}\n"
+        for game in HP.happy_hour_games
+    )
+
+    thread = threading.Thread(target=lambda: messagebox.showinfo("Happy Hour", formatted_games))
+    thread.start()
+
+
+def happy_hour_wrapper():
+    try:
+        asyncio.run(happy_hour())
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
+
+
 def on_quit():
     logging.info('Exit... Bye-bye :(')
     icon.stop()
@@ -25,6 +55,7 @@ def on_quit():
 
 
 menu = Menu(
+    Item('Happy Hour', happy_hour_wrapper),
     Item('Open Log', open_logs),
     Item('Open .env', open_env),
     Item('Exit', on_quit)

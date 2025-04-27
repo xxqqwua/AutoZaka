@@ -7,3 +7,5 @@ SpeechRecognition~=3.14.2
 pydub~=0.25.1
 pystray~=0.19.5
 pillow~=11.2.1
+beautifulsoup4~=4.13.4
+APScheduler~=3.11.0

@@ -62,9 +62,9 @@ class Participation:
                 '5': 'coupons'
             }.get(ga_type, 'vip')
 
-            if '{"code":304}' in r.text:
+            if '304' in r.text:
                 logging.info(f"There's already been a drawing for the {type_name}")
-            else:
+            elif '200' in r.text:
                 logging.info(f"The giveaway for {type_name} has been entered")
             logging.debug(r.text)
 
@@ -85,7 +85,7 @@ class Participation:
         """
         steam: 00:00, 13:00, 17:00
         game: 20:00
-        coupons: 20:00, ?
+        coupons: 20:00, 10:00
         vip: 21:00
 
         type 1 - steam
@@ -103,6 +103,7 @@ class Participation:
         schedule.every().day.at("20:05", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=4))
 
         schedule.every().day.at("20:06", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=5))
+        schedule.every().day.at("10:05", tz='Europe/Sofia').do(lambda: self.enter_the_giveaway(ga_type=5))
 
         while True:
             schedule.run_pending()
