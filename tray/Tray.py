@@ -13,6 +13,10 @@ from pystray import Icon, Menu, MenuItem as Item
 from PIL import Image
 
 from misc.HappyHour import HappyHour
+from misc.AutoStartUp import AutoStartUp
+
+
+AutoStartUp_is_set = AutoStartUp.check_autostartup()
 
 
 def open_logs():
@@ -40,12 +44,23 @@ async def happy_hour():
     thread = threading.Thread(target=lambda: messagebox.showinfo("Happy Hour", formatted_games))
     thread.start()
 
-
 def happy_hour_wrapper():
     try:
         asyncio.run(happy_hour())
     except Exception as e:
         logging.error(f"An error occurred: {e}")
+
+
+def SetAutoStartUp():
+    global AutoStartUp_is_set
+    AU = AutoStartUp()
+
+    if AutoStartUp_is_set:
+        AU.remove_autostartup()
+        AutoStartUp_is_set = False
+    else:
+        AU.set_autostartup()
+        AutoStartUp_is_set = True
 
 
 def on_quit():
@@ -58,6 +73,11 @@ menu = Menu(
     Item('Happy Hour', happy_hour_wrapper),
     Item('Open Log', open_logs),
     Item('Open .env', open_env),
+    Item('AutoStartUp', SetAutoStartUp, checked=lambda i: AutoStartUp.check_autostartup()),
+    # Double display for AutoStartUP in logs is normal:
+    # The first time is when the menu is just being built: you need to understand which items are checked.
+    # The second time is when the menu is actually shown to the user, to update the state
+    # (in case something changed between opening and rendering).
     Item('Exit', on_quit)
 )
 
