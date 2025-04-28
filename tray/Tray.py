@@ -14,7 +14,7 @@ from PIL import Image
 
 from misc.HappyHour import HappyHour
 from misc.AutoStartUp import AutoStartUp
-
+from validating.ValidateFiles import Validator
 
 AutoStartUp_is_set = AutoStartUp.check_autostartup()
 
@@ -26,7 +26,15 @@ def open_logs():
 
 def open_env():
     logging.debug('.ENV logs')
-    os.startfile('.env')
+
+    v = Validator()
+    v.validate_env_file()
+    path = v.dotenv_path
+
+    try:
+        os.startfile(path)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
 
 async def happy_hour():
