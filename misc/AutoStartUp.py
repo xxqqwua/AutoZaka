@@ -1,12 +1,15 @@
-import winreg
 import os
 import logging
+import getpass as getpass
 
 
 class AutoStartUp:
     def __init__(self):
         self.app_name = "AutoZaka.exe"
+        self.app_lnk = "AutoZaka.lnk"
         self.app_path = os.path.abspath(self.app_name)
+        self.user_name = getpass.getuser()
+        self.start_up_folder = fr'C:\Users\{self.user_name}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup'
 
     def set_autostartup(self):
         if not os.path.exists(self.app_path):
@@ -14,41 +17,34 @@ class AutoStartUp:
             return "File not found"
 
         logging.debug("Setting AutoStartUp...")
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                             r"Software\Microsoft\Windows\CurrentVersion\Run",
-                             0, winreg.KEY_SET_VALUE)
-        try:
-            winreg.SetValueEx(key, "AutoZaka", 0, winreg.REG_SZ, self.app_path)
-        except Exception as e:
-            logging.error(f"An error occurred: {e}")
-        finally:
-            winreg.CloseKey(key)
+        # vbs code to create a shortcut for .exe
+        vbs_code = fr"""
+        Set oWS = WScript.CreateObject("WScript.Shell")
+        sLinkFile = "{self.start_up_folder}\{self.app_lnk}"
+        Set oLink = oWS.CreateShortcut(sLinkFile)
+        oLink.TargetPath = "{self.app_path}"
+        oLink.WorkingDirectory = "{os.path.dirname(self.app_path)}"
+        oLink.Save
+            """
 
-    @staticmethod
-    def remove_autostartup():
+        temp_vbs = os.path.join(os.getenv("TEMP"), "create_shortcut.vbs")  # get TEMP users folder
+        with open(temp_vbs, "w", encoding="utf-8") as f:
+            f.write(vbs_code)
+
+        os.system(f'cscript //nologo "{temp_vbs}"')
+
+        os.remove(temp_vbs)
+
+    def remove_autostartup(self):
         logging.debug("Removing AutoStartUp...")
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                             r"Software\Microsoft\Windows\CurrentVersion\Run",
-                             0, winreg.KEY_SET_VALUE)
         try:
-            winreg.DeleteValue(key, "AutoZaka")
-        except Exception as e:
-            logging.error(f"An error occurred: {e}")
-        finally:
-            winreg.CloseKey(key)
+            os.remove(fr'{self.start_up_folder}\{self.app_lnk}')
+        except FileNotFoundError:
+            logging.error("File not found. AutoStartUp is not set.")
 
-    @staticmethod
-    def check_autostartup():
+    def check_autostartup(self):
         logging.debug("Checking AutoStartUp...")
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                             r"Software\Microsoft\Windows\CurrentVersion\Run",
-                             0, winreg.KEY_READ)
-        try:
-            winreg.QueryValueEx(key, "AutoZaka")
-            logging.debug("AutoStartUp has already been set")
+        if os.path.exists(fr'{self.start_up_folder}\{self.app_lnk}'):
             return True
-        except Exception as e:
-            logging.debug(f"AutoStartUp is not set: {e}")
+        else:
             return False
-        finally:
-            winreg.CloseKey(key)

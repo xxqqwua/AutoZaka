@@ -1,6 +1,7 @@
 from validating.ValidateFiles import Validator
 from giveaway.Participation import Participation
 from authorization.AuthManager import AuthManager
+import logging
 import tray.Tray
 
 import os
@@ -12,6 +13,7 @@ password = os.getenv('PASSWORD')
 
 
 def main():
+    logging.info("App started")
     v = Validator()
     v.validate_env_file()
 

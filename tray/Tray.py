@@ -16,6 +16,7 @@ from misc.HappyHour import HappyHour
 from misc.AutoStartUp import AutoStartUp
 from validating.ValidateFiles import Validator
 
+AutoStartUp = AutoStartUp()
 AutoStartUp_is_set = AutoStartUp.check_autostartup()
 
 
@@ -52,6 +53,7 @@ async def happy_hour():
     thread = threading.Thread(target=lambda: messagebox.showinfo("Happy Hour", formatted_games))
     thread.start()
 
+
 def happy_hour_wrapper():
     try:
         asyncio.run(happy_hour())
@@ -61,13 +63,12 @@ def happy_hour_wrapper():
 
 def SetAutoStartUp():
     global AutoStartUp_is_set
-    AU = AutoStartUp()
 
     if AutoStartUp_is_set:
-        AU.remove_autostartup()
+        AutoStartUp.remove_autostartup()
         AutoStartUp_is_set = False
     else:
-        AU.set_autostartup()
+        AutoStartUp.set_autostartup()
         AutoStartUp_is_set = True
 
 
