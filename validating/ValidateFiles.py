@@ -59,3 +59,8 @@ class Validator:
             logging.error("Please enter a valid email address and restart the program.")
             os.startfile(self.dotenv_path)
             exit()
+
+        password = os.getenv('PASSWORD')
+        email = os.getenv('EMAIL')
+
+        return email, password

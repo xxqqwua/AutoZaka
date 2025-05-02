@@ -15,9 +15,10 @@ password = os.getenv('PASSWORD')
 def main():
     logging.info("App started")
     v = Validator()
-    v.validate_env_file()
+    data = v.validate_env_file()
 
     p = Participation()
+    email = data[0]; password = data[1]
     if p.load_cookies() != 'FileNotFoundError':
         if p.enter_the_giveaway() != 'CSRF ERROR':
             p.scheduling()
