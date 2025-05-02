@@ -1,9 +1,8 @@
-import requests
-import re
 import asyncio
-import aiohttp
-import logging
+import re
 from datetime import datetime
+
+import aiohttp
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from bs4 import BeautifulSoup as Bs
 
@@ -103,8 +102,6 @@ class HappyHour:
 
         scheduler.add_job(self.extract_happy_hour_games, 'date', run_date=run_time)
         scheduler.start()
-
-        print("schedule started")
 
         while True:
             await asyncio.sleep(1)

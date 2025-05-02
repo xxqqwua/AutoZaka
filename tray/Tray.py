@@ -1,19 +1,18 @@
-import os
-import io
-import requests
-import logging
-import threading
 import asyncio
-
-import tkinter as tk
+import datetime
+import io
+import logging
+import os
+import threading
+from datetime import timedelta
 from tkinter import messagebox
 
-import pystray
-from pystray import Icon, Menu, MenuItem as Item
+import requests
 from PIL import Image
+from pystray import Icon, Menu, MenuItem as Item
 
-from misc.HappyHour import HappyHour
 from misc.AutoStartUp import AutoStartUp
+from misc.HappyHour import HappyHour
 from validating.ValidateFiles import Validator
 
 AutoStartUp = AutoStartUp()
@@ -41,6 +40,12 @@ def open_env():
 async def happy_hour():
     HP = HappyHour()
     await HP.extract_happy_hour_games()
+    next_happy_hour_sale_unix = await HP.get_next_happy_hour_start()
+
+    next_happy_hour_sale_eu = datetime.datetime.fromtimestamp(next_happy_hour_sale_unix)  # convert from unix to european format
+    now = datetime.datetime.now()
+    delta = next_happy_hour_sale_eu - now
+    delta = delta - timedelta(microseconds=delta.microseconds)  # Take away the microseconds
 
     formatted_games = "\n".join(
         f"Name: {game['name']}\n"
@@ -50,7 +55,8 @@ async def happy_hour():
         for game in HP.happy_hour_games
     )
 
-    thread = threading.Thread(target=lambda: messagebox.showinfo("Happy Hour", formatted_games))
+    thread = threading.Thread(target=lambda: messagebox.showinfo("Happy Hour",
+                                                                 f'{formatted_games}\nWhen next happy hour?\n{next_happy_hour_sale_eu}\nin {delta}'))
     thread.start()
 
 
