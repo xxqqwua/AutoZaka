@@ -42,7 +42,8 @@ async def happy_hour():
     await HP.extract_happy_hour_games()
     next_happy_hour_sale_unix = await HP.get_next_happy_hour_start()
 
-    next_happy_hour_sale_eu = datetime.datetime.fromtimestamp(next_happy_hour_sale_unix)  # convert from unix to european format
+    next_happy_hour_sale_eu = datetime.datetime.fromtimestamp(
+        next_happy_hour_sale_unix)  # convert from unix to european format
     now = datetime.datetime.now()
     delta = next_happy_hour_sale_eu - now
     delta = delta - timedelta(microseconds=delta.microseconds)  # Take away the microseconds
@@ -52,6 +53,7 @@ async def happy_hour():
         f"Tags: {game['tags']}\n"
         f"Discount: {game['discount']}\n"
         f"Current Price: {game['current_price']}\n"
+        + (f"Steam Prices: {game['steam_price']}\n" if game['steam_price'] else "")
         for game in HP.happy_hour_games
     )
 
@@ -67,7 +69,7 @@ def happy_hour_wrapper():
         logging.error(f"An error occurred: {e}")
 
 
-def SetAutoStartUp():
+def set_auto_start_up():
     global AutoStartUp_is_set
 
     if AutoStartUp_is_set:
@@ -88,7 +90,7 @@ menu = Menu(
     Item('Happy Hour', happy_hour_wrapper),
     Item('Open Log', open_logs),
     Item('Open .env', open_env),
-    Item('AutoStartUp', SetAutoStartUp, checked=lambda i: AutoStartUp.check_autostartup()),
+    Item('AutoStartUp', set_auto_start_up, checked=lambda i: AutoStartUp.check_autostartup()),
     # Double display for AutoStartUP in logs is normal:
     # The first time is when the menu is just being built: you need to understand which items are checked.
     # The second time is when the menu is actually shown to the user, to update the state

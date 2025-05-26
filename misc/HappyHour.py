@@ -6,6 +6,8 @@ import aiohttp
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from bs4 import BeautifulSoup as Bs
 
+from misc.SteamGamePriceParser import SteamGamePriceParser
+
 
 def extract_price(amount):
     match = re.search(r"-?\d+", amount)
@@ -44,6 +46,9 @@ class HappyHour:
         self.happy_hour_games = []
 
     async def extract_happy_hour_games(self):
+        s = SteamGamePriceParser()
+        steam_price = None
+
         async with aiohttp.ClientSession() as session:
             async with session.get('https://zaka-zaka.com/happyhour') as response:
                 html = await response.text()
@@ -60,6 +65,12 @@ class HappyHour:
 
             name_tag = link_tag.find("div", class_="game-block-name")
             name = name_tag.text.strip() if name_tag else "Can't find the game name"
+
+            game_app_id = await s.check_game_app_id_by_name(str(name))
+            if game_app_id:
+                steam_price = await s.check_game_price(game_app_id, 'ru, ua, us, eu')
+            else:
+                steam_price = None
 
             game_tags_tag = link_tag.find("div", class_="game-block-desc")
             game_tags = game_tags_tag.text.strip() if game_tags_tag else "Can't find the game description"
@@ -81,6 +92,7 @@ class HappyHour:
                                  f'UAH: {prices[0]}, '
                                  f'USD: {prices[1]}, '
                                  f'EUR: {prices[2]}',
+                'steam_price': steam_price,
             })
 
     async def get_next_happy_hour_start(self):
