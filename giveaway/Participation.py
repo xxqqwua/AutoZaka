@@ -1,8 +1,10 @@
-import schedule
-import requests
+import json
 import logging
 import time
-import json
+
+import requests
+import schedule
+from bs4 import BeautifulSoup as Bs
 
 
 class Participation:
@@ -43,6 +45,20 @@ class Participation:
         except FileNotFoundError:
             return 'FileNotFoundError'
 
+    def check_draw_counter(self):
+        try:
+            r = requests.get('https://zaka-zaka.com/profile/', cookies=self.cookies, headers=self.headers)
+            html = r.text
+            soup = Bs(html, 'html.parser')
+
+            count_div = soup.find("div", class_="profile-user-info-gifts")
+            count = count_div.find('span')
+            number = count.text.strip()
+            return number
+        except Exception as e:
+            logging.error(e)
+            return None
+
     def enter_the_giveaway(self, interval=1.5, ga_type=None):
         def do_enter(ga_type):
             data = {
@@ -66,6 +82,10 @@ class Participation:
                 logging.info(f"There's already been a drawing for the {type_name}")
             elif '200' in r.text:
                 logging.info(f"The giveaway for {type_name} has been entered")
+                draw_count = self.check_draw_counter()
+                if draw_count:
+                    logging.info(f"Participation {draw_count} Draw")
+
             logging.debug(r.text)
 
         self.load_cookies()
