@@ -10,7 +10,7 @@ Bot that automates participation in giveaways for the site https://zaka-zaka.com
 - [Requirements](#Requirements)
 - [Installation](#Installation)
 - [Usage](#Usage)
-- [Planned functionality](#Planned)
+- [Planned functionality](#Planned-functionality)
 
 ## Features:
 
