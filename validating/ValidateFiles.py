@@ -45,20 +45,20 @@ class Validator:
         load_dotenv(dotenv_path=self.dotenv_path)
 
         if not os.path.exists(self.dotenv_path):
-            with open('.env', 'w') as f:
+            with open(self.dotenv_path, 'w') as f:
                 f.write('EMAIL=\nPASSWORD=')
 
         if not os.getenv('EMAIL') or not os.getenv('PASSWORD'):
             messagebox.showerror("AutoZaka: Error", "Please fill in the .env file and restart the program.")
             logging.error("Please fill in the .env file and restart the program.")
             os.startfile(self.dotenv_path)
-            exit()
+            os._exit(0)
 
         if '@' not in os.getenv('EMAIL'):
             messagebox.showerror("AutoZaka: Error", "Please enter a valid email address and restart the program.")
             logging.error("Please enter a valid email address and restart the program.")
             os.startfile(self.dotenv_path)
-            exit()
+            os._exit(0)
 
         password = os.getenv('PASSWORD')
         email = os.getenv('EMAIL')
@@ -71,5 +71,5 @@ class Validator:
         self.log_path = self.app_folder_path / 'app.log'
 
         if not os.path.exists(self.log_path):
-            with open('.env', 'w') as f:
+            with open(self.log_path, 'w') as f:
                 f.close()

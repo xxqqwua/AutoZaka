@@ -66,6 +66,9 @@ class HappyHour:
             name_tag = link_tag.find("div", class_="game-block-name")
             name = name_tag.text.strip() if name_tag else "Can't find the game name"
 
+            if '(steam)' in name:
+                name = name.replace('(steam)', '')
+
             game_app_id = await s.check_game_app_id_by_name(str(name))
             if game_app_id:
                 steam_price = await s.check_game_price(game_app_id, 'ru, ua, us, eu')

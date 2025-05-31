@@ -1,11 +1,12 @@
 import logging
+import os
 
 import selenium.common
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from authorization.CookiesManager import CookiesManager
 from authorization.RecaptchaSolver import RecaptchaSolver
@@ -55,6 +56,6 @@ class AuthManager:
             )
             logging.error(INFO)
             self.driver.quit()
-            exit()
+            os._exit(0)
         except selenium.common.TimeoutException:
             pass

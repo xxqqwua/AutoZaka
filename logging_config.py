@@ -1,4 +1,9 @@
 import logging
+from validating.ValidateFiles import Validator
+
+v = Validator()
+v.validate_log_file()
+path = v.log_path
 
 # Define the logging configuration
 LOGGING_CONFIG = {
@@ -15,12 +20,12 @@ LOGGING_CONFIG = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'app.log',
+                'filename': str(path),
             'formatter': 'default'
         }
     },
     'root': {
-        'level': 'DEBUG',
+        'level': 'INFO',
         'handlers': ['console', 'file']
     }
 }
