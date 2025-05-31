@@ -21,7 +21,15 @@ AutoStartUp_is_set = AutoStartUp.check_autostartup()
 
 def open_logs():
     logging.debug('Open logs')
-    os.startfile('app.log')
+
+    v = Validator()
+    v.validate_log_file()
+    log_path = v.log_path
+
+    try:
+        os.startfile(log_path)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
 
 def open_env():
@@ -29,10 +37,10 @@ def open_env():
 
     v = Validator()
     v.validate_env_file()
-    path = v.dotenv_path
+    env_path = v.dotenv_path
 
     try:
-        os.startfile(path)
+        os.startfile(env_path)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 

@@ -1,10 +1,9 @@
-import tkinter as tk
-from tkinter import messagebox
-
-from dotenv import load_dotenv
 import logging
 import os
 from pathlib import Path
+from tkinter import messagebox
+
+from dotenv import load_dotenv
 
 
 class Validator:
@@ -15,6 +14,7 @@ class Validator:
         self.documents_path = None
         self.app_folder_path = None
         self.dotenv_path = None
+        self.log_path = None
 
     def create_folder(self):
         for folder in self.possible_docs_folders:
@@ -64,3 +64,12 @@ class Validator:
         email = os.getenv('EMAIL')
 
         return email, password
+
+    def validate_log_file(self):
+        self.create_folder()
+
+        self.log_path = self.app_folder_path / 'app.log'
+
+        if not os.path.exists(self.log_path):
+            with open('.env', 'w') as f:
+                f.close()
