@@ -141,7 +141,7 @@ pip install -r requirements.txt
 pyinstaller --onefile --noconsole --hidden-import pkg_resources --add-data "requirements.txt;." --name AutoZaka main.py
 ```
 
-**4. Используйте .exe файл, который будет в папке "dist"** **ИЛИ** Скачайте уже готовый, скомпилированный файл [**здесь**](https://github.com/xxqqwua/AutoZaka/releases); <br> Или напрямую к самому файлу по [**ссылке**](https://github.com/xxqqwua/AutoZaka/releases/download/v1.0.0/AutoZaka.exe).
+**4. Используйте .exe файл, который будет в папке "dist"** <br>**ИЛИ** <br>Скачайте уже готовый, скомпилированный файл [**здесь**](https://github.com/xxqqwua/AutoZaka/releases); <br> Или напрямую к самому файлу по [**ссылке**](https://github.com/xxqqwua/AutoZaka/releases/download/v1.0.0/AutoZaka.exe).
 
 ## Использование:
 **Для работы приложения необходимо подключение к интернету.**
