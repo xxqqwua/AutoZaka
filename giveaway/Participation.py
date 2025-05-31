@@ -6,6 +6,8 @@ import requests
 import schedule
 from bs4 import BeautifulSoup as Bs
 
+from validating.ValidateFiles import Validator
+
 
 class Participation:
     def __init__(self):
@@ -36,7 +38,11 @@ class Participation:
 
     def load_cookies(self):
         try:
-            with open('cookies.json', 'r') as f:
+            v = Validator()
+            v.create_folder()
+            app_path = v.app_folder_path
+
+            with open(app_path / 'cookies.json', 'r') as f:
                 data = json.load(f)
 
             self.YII_CSRF_TOKEN = data['YII_CSRF_TOKEN']
@@ -44,6 +50,8 @@ class Participation:
             self.cookies['PHPSESSID'] = data['PHPSESSID']
         except FileNotFoundError:
             return 'FileNotFoundError'
+        except json.decoder.JSONDecodeError:
+            return 'JSONDecodeError'
 
     def check_draw_counter(self):
         try:

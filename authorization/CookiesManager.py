@@ -1,5 +1,7 @@
 import logging
 
+from validating.ValidateFiles import Validator
+
 logger = logging.getLogger(__name__)
 
 
@@ -31,6 +33,10 @@ class CookiesManager:
     def save_cookies(token, phpsessid):  # Save cookies function
         import json
 
+        v = Validator()
+        v.create_folder()
+        app_path = v.app_folder_path
+
         data = {'YII_CSRF_TOKEN': str(token), 'PHPSESSID': str(phpsessid)}
-        with open('cookies.json', 'w') as f:
+        with open(app_path / 'cookies.json', 'w') as f:
             json.dump(data, f)

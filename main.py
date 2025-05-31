@@ -19,7 +19,7 @@ def main():
 
     p = Participation()
     email = data[0]; password = data[1]
-    if p.load_cookies() != 'FileNotFoundError':
+    if p.load_cookies() != 'FileNotFoundError' or p.load_cookies() != 'JSONDecodeError':
         if p.enter_the_giveaway() != 'CSRF ERROR':
             p.scheduling()
         else:
