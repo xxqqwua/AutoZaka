@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 from pathlib import Path
 from tkinter import messagebox
 
@@ -73,3 +74,12 @@ class Validator:
         if not os.path.exists(self.log_path):
             with open(self.log_path, 'w') as f:
                 f.close()
+
+    @staticmethod
+    def validate_ffmpeg():
+        is_installed = bool(shutil.which("ffmpeg"))
+
+        if not is_installed:
+            messagebox.showerror("AutoZaka: Error", "Please make sure FFmpeg is working correctly and restart the app.")
+            logging.error("Please make sure FFmpeg is working correctly and restart the app.")
+            os._exit(0)

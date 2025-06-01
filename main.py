@@ -1,4 +1,4 @@
-from validating.ValidateFiles import Validator
+from validating.Validator import Validator
 from giveaway.Participation import Participation
 from authorization.AuthManager import AuthManager
 import logging
@@ -15,6 +15,7 @@ password = os.getenv('PASSWORD')
 def main():
     logging.info("App started")
     v = Validator()
+    v.validate_ffmpeg()
     data = v.validate_env_file()
 
     p = Participation()

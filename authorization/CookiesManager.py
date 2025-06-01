@@ -1,6 +1,6 @@
 import logging
 
-from validating.ValidateFiles import Validator
+from validating.Validator import Validator
 
 logger = logging.getLogger(__name__)
 

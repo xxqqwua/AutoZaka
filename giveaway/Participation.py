@@ -6,7 +6,7 @@ import requests
 import schedule
 from bs4 import BeautifulSoup as Bs
 
-from validating.ValidateFiles import Validator
+from validating.Validator import Validator
 
 
 class Participation:

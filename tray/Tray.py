@@ -13,7 +13,7 @@ from pystray import Icon, Menu, MenuItem as Item
 
 from misc.AutoStartUp import AutoStartUp
 from misc.HappyHour import HappyHour
-from validating.ValidateFiles import Validator
+from validating.Validator import Validator
 
 AutoStartUp = AutoStartUp()
 AutoStartUp_is_set = AutoStartUp.check_autostartup()
