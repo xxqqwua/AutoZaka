@@ -1,11 +1,10 @@
-from validating.Validator import Validator
-from giveaway.Participation import Participation
-from authorization.AuthManager import AuthManager
-import logging
-import tray.Tray
-
 import os
+
 from dotenv import load_dotenv
+
+from authorization.AuthManager import AuthManager
+from giveaway.Participation import Participation
+from validating.Validator import Validator
 
 load_dotenv()
 email = os.getenv('EMAIL')
@@ -13,13 +12,17 @@ password = os.getenv('PASSWORD')
 
 
 def main():
-    logging.info("App started")
     v = Validator()
     v.validate_ffmpeg()
-    data = v.validate_env_file()
+    if v.validate_log_file() == 'Created for the first time':
+        data = v.validate_env_file(is_first_time=True)
+    else:
+        data = v.validate_env_file()
 
+    logging.info("App started")
     p = Participation()
-    email = data[0]; password = data[1]
+    email = data[0];
+    password = data[1]
     if p.load_cookies() != 'FileNotFoundError' or p.load_cookies() != 'JSONDecodeError':
         if p.enter_the_giveaway() != 'CSRF ERROR':
             p.scheduling()
@@ -38,6 +41,7 @@ def login_and_participate(p, email, password):
 
 if __name__ == '__main__':
     import logging
+    import tray.Tray
     from logging_config import LOGGING_CONFIG
 
     logging.config.dictConfig(LOGGING_CONFIG)

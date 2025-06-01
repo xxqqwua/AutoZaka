@@ -3,6 +3,7 @@ import os
 import shutil
 from pathlib import Path
 from tkinter import messagebox
+from tkinter import simpledialog
 
 from dotenv import load_dotenv
 
@@ -39,7 +40,8 @@ class Validator:
         else:
             logging.error("Documents folder not found.")
 
-    def validate_env_file(self):
+    def validate_env_file(self, is_first_time=False):
+        forbiden_chars = [',', ';', ' ']
         self.create_folder()
 
         self.dotenv_path = self.app_folder_path / '.env'
@@ -50,19 +52,41 @@ class Validator:
                 f.write('EMAIL=\nPASSWORD=')
 
         if not os.getenv('EMAIL') or not os.getenv('PASSWORD'):
-            messagebox.showerror("AutoZaka: Error", "Please fill in the .env file and restart the program.")
-            logging.error("Please fill in the .env file and restart the program.")
-            os.startfile(self.dotenv_path)
-            os._exit(0)
+            if is_first_time:
+                user_email = simpledialog.askstring("AutoZaka: .ENV", "Enter your email from zaka-zaka.com below")
+                while '@' not in user_email or \
+                        '.' not in user_email or \
+                        len(user_email) < 5 or \
+                        any(char in user_email for char in forbiden_chars):
+                    user_email = simpledialog.askstring("AutoZaka: .ENV (Repeat)",
+                                                        "Check your entered email, make it suitable for email standards and enter it below")
 
-        if '@' not in os.getenv('EMAIL'):
+                user_password = simpledialog.askstring("AutoZaka: .ENV", "Enter your password from zaka-zaka.com below")
+
+                with open(self.dotenv_path, 'w') as f:
+                    f.write(f'EMAIL={user_email}\nPASSWORD={user_password}')
+
+            # If .env likely exists but is incomplete or was cleared
+            else:
+                messagebox.showerror("AutoZaka: Error", "Please fill in the .env file and restart the program.")
+                logging.error("Please fill in the .env file and restart the program.")
+                os.startfile(self.dotenv_path)
+                os._exit(0)
+
+        if is_first_time:
+            # One more .env load to make the subsequent checks work correctly
+            load_dotenv(dotenv_path=self.dotenv_path)
+
+        if '@' not in os.getenv('EMAIL') or \
+                '.' not in os.getenv('EMAIL') or \
+                any(char in os.getenv('EMAIL') for char in forbiden_chars):
             messagebox.showerror("AutoZaka: Error", "Please enter a valid email address and restart the program.")
             logging.error("Please enter a valid email address and restart the program.")
             os.startfile(self.dotenv_path)
             os._exit(0)
 
-        password = os.getenv('PASSWORD')
         email = os.getenv('EMAIL')
+        password = os.getenv('PASSWORD')
 
         return email, password
 
@@ -74,6 +98,12 @@ class Validator:
         if not os.path.exists(self.log_path):
             with open(self.log_path, 'w') as f:
                 f.close()
+
+        file_len = len(self.log_path.read_text().splitlines())
+        if file_len <= 1:
+            return 'Created for the first time'
+
+        return True
 
     @staticmethod
     def validate_ffmpeg():
