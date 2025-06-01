@@ -61,7 +61,11 @@ async def happy_hour():
         f"Tags: {game['tags']}\n"
         f"Discount: {game['discount']}\n"
         f"Current Price: {game['current_price']}\n"
-        + (f"Steam Prices: {game['steam_price']}\n" if game['steam_price'] else "")
+        + (f"Steam Prices: {game['steam_price']}\n"
+           if game['steam_price'] and not all(
+            region.strip(" {}") == "The game is not available in this region"
+            for region in game['steam_price'].split(",")
+        ) else "")
         for game in HP.happy_hour_games
     )
 
