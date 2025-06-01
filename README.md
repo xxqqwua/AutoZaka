@@ -11,6 +11,7 @@ Bot that automates participation in giveaways for the site https://zaka-zaka.com
 - [Installation](#Installation)
 - [Usage](#Usage)
 - [Planned functionality](#Planned-functionality)
+- [Acknowledgements](#Acknowledgements)
 
 ## Features:
 
@@ -97,6 +98,11 @@ autostartup.
 - Make full support for proxies
 - Adapt the app to multiple accounts
 
+## Acknowledgements:
+
+- CAPTCHA bypass logic is based on an external solution by [obaskly](https://github.com/obaskly/RecaptchaBypass), which helped handle automated solving.
+- Steam price parsing is done using my own pre-existing script, available at [GitHub Repository](https://github.com/xxqqwua/Steam_Games_Price_Parser).
+
 ## **<br>RU:**
 
 Бот, который автоматизирует участие в розыгрышах на сайте https://zaka-zaka.com/
@@ -107,6 +113,7 @@ autostartup.
 - [Установка](#Установка)
 - [Использование](#Использование)
 - [Планируемый функционал](#Планируемый-функционал)
+- [Благодарности](#Благодарности)
 
 ## Возможности:
 - Полная автоматизация процесса участия
@@ -178,3 +185,8 @@ pyinstaller --onefile --noconsole --hidden-import pkg_resources --add-data "requ
 ## Планируемый функционал:
 - Сделать полную поддержку прокси
 - Адаптировать приложение под несколько аккаунтов
+
+## Благодарности:
+
+- Обход CAPTCHA реализован на основе стороннего решения от [obaskly](https://github.com/obaskly/RecaptchaBypass), использованного для автоматизации распознавания.
+- Парсинг цен из Steam выполнен с использованием моего ранее написанного скрипта — репозиторий доступен здесь: [GitHub Repository](https://github.com/xxqqwua/Steam_Games_Price_Parser).
