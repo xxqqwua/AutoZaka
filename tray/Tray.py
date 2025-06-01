@@ -56,16 +56,26 @@ async def happy_hour():
     delta = next_happy_hour_sale_eu - now
     delta = delta - timedelta(microseconds=delta.microseconds)  # Take away the microseconds
 
+    def is_price_unavailable(price_data):
+        if isinstance(price_data, dict):
+            values = price_data.values()
+        else:
+            values = price_data.split(",")
+
+        return all(
+            val.strip(" {}") == "The game is not available in this region"
+            for val in values
+        )
+
     formatted_games = "\n".join(
         f"Name: {game['name']}\n"
         f"Tags: {game['tags']}\n"
         f"Discount: {game['discount']}\n"
         f"Current Price: {game['current_price']}\n"
         + (f"Steam Prices: {game['steam_price']}\n"
-           if game['steam_price'] and not all(
-            region.strip(" {}") == "The game is not available in this region"
-            for region in game['steam_price'].split(",")
-        ) else "")
+           if game['steam_price'] and not is_price_unavailable(game['steam_price'])
+           else ""
+        )
         for game in HP.happy_hour_games
     )
 
