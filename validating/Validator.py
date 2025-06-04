@@ -17,6 +17,7 @@ class Validator:
         self.app_folder_path = None
         self.dotenv_path = None
         self.log_path = None
+        self.proxy_path = None
 
     def create_folder(self):
         for folder in self.possible_docs_folders:
@@ -90,6 +91,25 @@ class Validator:
 
         return email, password
 
+    def validate_proxy_files(self):
+        self.create_folder()
+
+        self.proxy_path = self.app_folder_path / 'proxy.txt'
+
+        if not os.path.exists(self.proxy_path):
+            with open(self.proxy_path, 'w') as f:
+                f.close()
+
+        file_len = len(self.proxy_path.read_text().splitlines())
+        if file_len <= 0:
+            return None
+
+        with open(self.proxy_path, 'r') as f:
+            proxy = f.read().splitlines()
+
+        proxy = [i for i in proxy if i]  # clear empty lines
+        return proxy
+
     def validate_log_file(self):
         self.create_folder()
 
@@ -101,7 +121,7 @@ class Validator:
 
         file_len = len(self.log_path.read_text().splitlines())
         if file_len <= 1:
-            return 'Created for the first time'
+            return False
 
         return True
 

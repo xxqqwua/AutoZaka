@@ -14,7 +14,9 @@ password = os.getenv('PASSWORD')
 def main():
     v = Validator()
     v.validate_ffmpeg()
-    if v.validate_log_file() == 'Created for the first time':
+    proxy = v.validate_proxy_files()
+
+    if not v.validate_log_file():
         data = v.validate_env_file(is_first_time=True)
     else:
         data = v.validate_env_file()
@@ -41,7 +43,6 @@ def login_and_participate(p, email, password):
 
 if __name__ == '__main__':
     import logging
-    import tray.Tray
     from logging_config import LOGGING_CONFIG
 
     logging.config.dictConfig(LOGGING_CONFIG)
