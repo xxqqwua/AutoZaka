@@ -10,9 +10,10 @@ from validating.Validator import Validator
 
 
 class Participation:
-    def __init__(self):
+    def __init__(self, proxy=None):
         self.YII_CSRF_TOKEN = None
         self.PHPSESSID = None
+        self.proxy = proxy
 
         self.cookies = {
             'PHPSESSID': self.PHPSESSID,
@@ -55,7 +56,8 @@ class Participation:
 
     def check_draw_counter(self):
         try:
-            r = requests.get('https://zaka-zaka.com/profile/', cookies=self.cookies, headers=self.headers)
+            r = requests.get('https://zaka-zaka.com/profile/', cookies=self.cookies, headers=self.headers,
+                             proxies=self.proxy)
             html = r.text
             soup = Bs(html, 'html.parser')
 
@@ -75,7 +77,7 @@ class Participation:
             }
 
             r = requests.post('https://zaka-zaka.com/game/gifts/ajax/', cookies=self.cookies, headers=self.headers,
-                              data=data)
+                              data=data, proxies=self.proxy)
 
             if 'сайта' in r.text or ':E' in r.text:
                 return 'CSRF ERROR'

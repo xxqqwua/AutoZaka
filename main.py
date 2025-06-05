@@ -1,4 +1,5 @@
 import os
+import random
 
 from dotenv import load_dotenv
 
@@ -22,8 +23,8 @@ def main():
         data = v.validate_env_file()
 
     logging.info("App started")
-    p = Participation()
-    email = data[0];
+    p = Participation(proxy=random.choice(proxy))
+    email = data[0]
     password = data[1]
     if p.load_cookies() != 'FileNotFoundError' or p.load_cookies() != 'JSONDecodeError':
         if p.enter_the_giveaway() != 'CSRF ERROR':
