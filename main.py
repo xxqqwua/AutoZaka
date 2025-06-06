@@ -23,7 +23,7 @@ def main():
         data = v.validate_env_file()
 
     logging.info("App started")
-    p = Participation(proxy=random.choice(proxy))
+    p = Participation(proxy=random.choice(proxy) if proxy else None)
     email = data[0]
     password = data[1]
     if p.load_cookies() != 'FileNotFoundError' or p.load_cookies() != 'JSONDecodeError':
