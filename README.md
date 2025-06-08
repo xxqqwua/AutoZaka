@@ -72,11 +72,9 @@ stored all the necessary files for the app:\
 <br> Their deletion, moving or unauthorized modification can cause
 the app to become unusable.** 
 
-First of all, after launching, the app will ask you to fill in the .env file. After closing the window with **an
-error**, app will open the .env file with already prepared lines. You need to enter your **email** and **password** in the
-corresponding lines and start the app again.
+First of all, after launching, the app will ask you to fill in the .env file. The app will open two windows where you need to enter your **email** and **password**.
 
-**Here's example:**\
+**Here's example of what the .env file should look like:**\
 ![example_data_photo.png](example_data_photo.png)
 
 After launching, the app will understand that there are no cookies yet and will auth to the site **by using your data**.
@@ -166,9 +164,9 @@ pyinstaller --onefile --noconsole --hidden-import pkg_resources --add-data "requ
 **Файлы из данной директории очень важны для работы с приложением. <br>
 Их удаление, перемещение или несанкционированное изменение может привести к неработоспособности приложения.**
 
-В первую очередь, после запуска, приложение попросит вас заполнить .env файл. После закрытия окна с **ошибкой**, приложение откроет .env файл с уже подготовленными строками. Вам нужно ввести ваш **email** и **пароль** в соответствующих строках и запустить приложение снова.
+В первую очередь, после запуска, приложение попросит вас заполнить .env файл. Прежде всего, после запуска приложение попросит вас заполнить файл .env. Приложение откроет два окна, в которых вам нужно будет ввести **почту** и **пароль**.
 
-**Вот пример:**\
+**Пример того, как должен выглядеть файл .env:**\
 ![example_data_photo.png](example_data_photo.png)
 
 После запуска приложение поймет, что cookies еще нет, и выполнит авторизацию на сайте **используя ваши данные**. <br>После успешного входа будет создан файл **cookie.json**.
